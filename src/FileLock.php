@@ -15,6 +15,16 @@ class FileLock
 
     public static function lock($tag)
     {
+        self::getLock($tag, true);
+    }
+
+    /**
+     * @param string $tag Unique identification
+     * @param bool $die Failed to acquire exclusive lock is whether to execute die()
+     * @return bool If get exclusive lock fail return false, else return true.
+     */
+    public static function getLock($tag, $die = null)
+    {
         if (!self::$prefix) {
             self::$prefix = sys_get_temp_dir() . '/_PHP_FileLock_';
         }
@@ -23,10 +33,12 @@ class FileLock
         file_put_contents($filename, time());
         self::$fp = fopen($filename, "r+");
         if (!flock(self::$fp, LOCK_EX | LOCK_NB)) {
-            die(0);
+            if ($die) die(0);
+            return false;
         }
         self::$instances[$tag] = new static();
         self::$instances[$tag]->lockFile = $filename;
+        return true;
     }
 
     public static function unlock($tag)
