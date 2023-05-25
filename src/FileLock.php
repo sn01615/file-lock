@@ -50,7 +50,9 @@ class FileLock
 
     public function __destruct()
     {
-        unlink($this->lockFile);
+        if (file_exists($this->lockFile)) {
+            unlink($this->lockFile);
+        }
     }
 }
 
