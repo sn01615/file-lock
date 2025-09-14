@@ -30,7 +30,7 @@ FileLock::unlock('lockKey');
 ```
 单机单线程排队：
 ```php
-// 一直排队知道随机抢占到锁
+// 一直排队直到随机抢占到锁
 \PhpUtils\Locker::wait("aaa");
 
 // 等待10秒, 如果10秒内没有抢占到锁则返回false, 否则返回true

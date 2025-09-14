@@ -11,19 +11,19 @@ class Locker
     /**
      * 获取锁（随机抢占锁，非严格排队获取）
      * @param string $key 锁的唯一标识
-     * @param int $timeout 超时时间(秒)，0表示无限等待
+     * @param float $timeout 超时时间(秒)，0表示无限等待
      * @return bool 是否获取到锁
      */
     public static function wait($key, $timeout = 0)
     {
         $file = __DIR__ . "/.lock_" . md5($key) . ".tmp";
-        $start_time = time();
+        $start_time = microtime(true);
 
         if (!self::$instance) self::$instance = new self(); # 有实例才能触发析构函数
 
         while (true) {
             // 检查是否超时
-            if ($timeout > 0 && (time() - $start_time) >= $timeout) {
+            if ($timeout > 0 && (microtime(true) - $start_time) >= $timeout) {
                 return false;
             }
 
