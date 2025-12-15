@@ -28,7 +28,7 @@ if ($status) {
 # Unlock
 FileLock::unlock('lockKey');
 ```
-单机单线程排队：
+单机单线程随机抢占锁：
 ```php
 // 一直排队直到随机抢占到锁
 \PhpUtils\Locker::wait("aaa");
