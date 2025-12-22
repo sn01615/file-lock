@@ -21,6 +21,7 @@ class Locker
 
         if (!self::$instance) self::$instance = new self(); # 有实例才能触发析构函数
 
+        $ii = 10000;
         while (true) {
             // 检查是否超时
             if ($timeout > 0 && (microtime(true) - $start_time) >= $timeout) {
@@ -44,7 +45,12 @@ class Locker
                 // 获取锁失败，关闭文件句柄
                 fclose($fp);
                 if ($timeout == -1) return false;
-                usleep(10000); // 等待10毫秒后重试
+                if ($ii < 1000000) {
+                    usleep($ii);// 等待10毫秒后重试
+                    $ii++;
+                } else {
+                    sleep(1);
+                }
             }
         }
     }
