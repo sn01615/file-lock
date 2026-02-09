@@ -28,6 +28,14 @@ if ($status) {
 # Unlock
 FileLock::unlock('lockKey');
 ```
+
+有作用域的sleep排队的锁
+
+```php
+// $locker 释放的时候锁就会释放
+$locker = new \PhpUtils\FileLocker();
+$locker->wait("aaa");
+```
 单机单线程随机抢占锁：
 ```php
 // 一直排队直到随机抢占到锁
